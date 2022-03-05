@@ -11,7 +11,7 @@ class CreateGrupoTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('grupo', function (Blueprint $table) {
+		Schema::create('grupos', function (Blueprint $table) {
 			$table->id();
 			$table->string('gru_nome');
 			$table->string('gru_descricao');
@@ -26,6 +26,6 @@ class CreateGrupoTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::dropIfExists('grupo');
+		Schema::dropIfExists('grupos');
 	}
 }

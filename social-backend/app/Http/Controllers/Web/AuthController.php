@@ -52,7 +52,9 @@ class AuthController extends Controller {
 	}
 
 	public function register(Request $request) {
-		$this->validate($request, [
+		$errors = array();
+
+		$validator = Validator::make($request->all(), [
 			'email' => 'required|email|unique:users',
 			'password' => 'required|min:6',
 			'usr_name' => 'required',
@@ -67,7 +69,6 @@ class AuthController extends Controller {
 
 			return response()->json(['errors' => $errors]);
 		}
-
 
 		$obj = new User;
 

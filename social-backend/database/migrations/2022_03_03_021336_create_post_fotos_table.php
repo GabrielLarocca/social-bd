@@ -18,7 +18,7 @@ class CreatePostFotosTable extends Migration {
 			$table->timestamps();
 
 			$table->foreign('pof_id_post')->references('id')->on('posts');
-			$table->foreign('pof_id_foto')->references('id')->on('file');
+			$table->foreign('pof_id_foto')->references('id')->on('files');
 		});
 	}
 
