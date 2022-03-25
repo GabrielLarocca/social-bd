@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Post;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Validator;
+
+use App\Models\Grupo;
+use App\Models\GrupoUsers;
+use Illuminate\Support\Facades\Log;
 
 class GrupoController extends Controller {
 
@@ -14,7 +17,8 @@ class GrupoController extends Controller {
 		$errors = array();
 
 		$validator = Validator::make($request->all(), [
-			'pos_texto' => 'required|max:255',
+			'gru_nome' => 'required|max:255',
+			'gru_descricao' => 'required|max:255',
 		]);
 
 		if ($validator->fails()) {
@@ -25,14 +29,10 @@ class GrupoController extends Controller {
 			return response()->json(['errors' => $errors], 422);
 		}
 
-		$obj = new Post;
+		$obj = new Grupo;
 
-		$obj->pos_texto = $request->pos_texto;
-		$obj->pos_id_user = $request->$request->user()->id;
-
-		if ($request->post_id_grupo) {
-			$obj->post_id_grupo = $request->post_id_grupo;
-		}
+		$obj->gru_nome = $request->gru_nome;
+		$obj->gru_descricao = $request->gru_descricao;
 
 		$obj->save();
 
@@ -43,7 +43,8 @@ class GrupoController extends Controller {
 		$errors = array();
 
 		$validator = Validator::make($request->all(), [
-			'pos_texto' => 'required|max:255',
+			'gru_nome' => 'required|max:255',
+			'gru_descricao' => 'required|max:255',
 		]);
 
 		if ($validator->fails()) {
@@ -54,9 +55,10 @@ class GrupoController extends Controller {
 			return response()->json(['errors' => $errors], 422);
 		}
 
-		$obj = Post::where(['pos_id_user' => $request->user()->id, 'id' => $id])->firstOrFail();
+		$obj = Grupo::where(['id' => $id])->firstOrFail();
 
-		$obj->pos_texto = $request->pos_texto;
+		$obj->gru_nome = $request->gru_nome;
+		$obj->gru_descricao = $request->gru_descricao;
 
 		$obj->save();
 
@@ -64,23 +66,56 @@ class GrupoController extends Controller {
 	}
 
 	public function simpleList(Request $request) {
-		$posts = Post::orderBy('created_at', 'desc');
+		$grupo = Grupo::orderBy('created_at', 'desc');
 
 		if (!empty($request->filter)) {
-			$posts->where(function ($q) use ($request) {
-				$q->orWhere('pos_texto', 'LIKE', '%' . $request->filter . '%');
+			$grupo->where(function ($q) use ($request) {
+				$q->orWhere('gru_nome', 'LIKE', '%' . $request->filter . '%');
 			});
 		}
 
-		return response()->json($posts);
+		$grupo = $grupo->get();
+
+		return response()->json($grupo);
+	}
+
+	public function participarGrupo(Request $request) {
+		$errors = array();
+
+		$validator = Validator::make($request->all(), [
+			'grs_id_grupo' => 'required|max:255',
+		]);
+
+		if ($validator->fails()) {
+			foreach ($validator->errors()->getMessages() as $item) {
+				array_push($errors, $item[0]);
+			}
+
+			return response()->json(['errors' => $errors], 422);
+		}
+
+		$obj = new GrupoUsers;
+
+		$obj->grs_id_grupo = $request->grs_id_grupo;
+		$obj->grs_id_user = $request->user()->id;
+
+		$obj->save();
+
+		return response()->json($obj);
 	}
 
 	public function get(Request $request, $id) {
-		return response()->json(Post::where(["id" => $id])->firstOrFail());
+		return response()->json(Grupo::where(["id" => $id])->firstOrFail());
+	}
+
+	public function participantes(Request $request, $id) {
+		$grupo = GrupoUsers::orderBy('created_at', 'desc')->where(['grs_id_user' => $request->user()->id])->with('user')->get();
+
+		return response()->json($grupo);
 	}
 
 	public function delete(Request $request, $id) {
-		$post = Post::where(['pos_id_user' => $request->user()->id, 'id' => $id])->firstOrFail();
+		$post = Grupo::where(['id' => $id])->firstOrFail();
 		$post->delete();
 
 		return response(null, 200);

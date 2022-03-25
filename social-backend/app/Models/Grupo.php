@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grupo extends Model {
 
-	protected $table = "grupos";
+	protected $table = "grupo";
 	protected $fillable = [
 		'gru_nome',
 		'gru_descricao',
 	];
 
 	public function users() {
-		return $this->hasMany(GrupoUser::class, 'grs_id_grupo');
+		return $this->hasMany(GrupoUsers::class, 'grs_id_grupo');
 	}
 }
