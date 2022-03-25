@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GrupoUser extends Model {
+class GrupoUsers extends Model {
 
-	protected $table = "grupo_user";
+	protected $table = "grupo_users";
 	protected $fillable = [
 		'grs_id_grupo',
 		'grs_id_user',

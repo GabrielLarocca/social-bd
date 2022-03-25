@@ -67,12 +67,6 @@ class PostController extends Controller {
 	public function list(Request $request) {
 		$posts = Post::orderBy('created_at', 'desc');
 
-		if (!empty($request->filter)) {
-			$posts->where(function ($q) use ($request) {
-				$q->orWhere('pos_texto', 'LIKE', '%' . $request->filter . '%');
-			});
-		}
-
 		$posts = $posts->get();
 
 		return response()->json($posts);
@@ -80,12 +74,6 @@ class PostController extends Controller {
 
 	public function listMy(Request $request) {
 		$posts = Post::where(['pos_id_user' => $request->user()->id])->orderBy('created_at', 'desc');
-
-		if (!empty($request->filter)) {
-			$posts->where(function ($q) use ($request) {
-				$q->orWhere('pos_texto', 'LIKE', '%' . $request->filter . '%');
-			});
-		}
 
 		$posts = $posts->get();
 
