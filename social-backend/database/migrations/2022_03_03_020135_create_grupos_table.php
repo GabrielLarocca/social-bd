@@ -4,18 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFilesTable extends Migration {
+class CreateGrupoTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('files', function (Blueprint $table) {
+		Schema::create('grupos', function (Blueprint $table) {
 			$table->id();
-			$table->string('fil_name');
-			$table->integer('fil_size');
-			$table->string('fil_url');
+			$table->string('gru_nome');
+			$table->string('gru_descricao');
+
 			$table->timestamps();
 		});
 	}
@@ -26,6 +26,6 @@ class CreateFilesTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::dropIfExists('files');
+		Schema::dropIfExists('grupos');
 	}
 }
