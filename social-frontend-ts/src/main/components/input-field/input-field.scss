@@ -1,0 +1,42 @@
+@import "../../colors";
+
+.input-field-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  text-align: left;
+
+  span {
+    font-size: 12px;
+    user-select: none;
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    display: inline-block;
+    border: 1px solid $input;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+    padding: 10px 10px;
+
+    &:focus,
+    &:hover {
+      border: 1px solid;
+      box-shadow: 0 0 5px $input-blue;
+      border: 1px solid $input-blue;
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  &.without-margin-top {
+    margin-top: 0px;
+  }
+}

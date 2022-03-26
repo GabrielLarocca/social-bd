@@ -1,0 +1,20 @@
+@import "../../colors";
+
+.account-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .account-page-title {
+    font-size: 40px;
+    color: $button-purple1;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+
+  form {
+      margin: 20px 0px;
+  }
+}

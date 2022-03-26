@@ -1,0 +1,56 @@
+@import "../../colors";
+
+.button-container {
+  border: none;
+  padding: 15px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 144px;
+  margin-top: 15px;
+  cursor: pointer;
+  border-radius: 4px;
+
+  &.primary-button {
+    color: white;
+    background-color: $button-purple1;
+  
+    &:hover,
+    &:active,
+    &.active-classname {
+      background-color: $button-purple2;
+    }
+  }
+
+  &.secondary-button {
+    background-color: transparent;
+    border: 1px solid $button-purple1;
+    color: $button-purple1;
+
+    &:hover,
+    &:active {
+      border: 1px solid $button-purple2;
+      color: $button-purple2;
+      background-color: $white2;
+    }
+  }
+
+  &.delete-button {
+    background-color: transparent;
+    border: 1px solid red;
+    color: red;
+
+    &:hover,
+    &:active {
+      border: 1px solid rgb(177, 17, 17);
+      color: rgb(177, 17, 17);
+      background-color: $white2;
+    }
+  }
+
+  &.without-margin-top {
+    margin-top: 0px;
+  }
+}

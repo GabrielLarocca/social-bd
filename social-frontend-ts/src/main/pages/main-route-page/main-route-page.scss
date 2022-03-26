@@ -1,0 +1,34 @@
+@import "../../colors";
+
+.main-route-page-container {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  flex-direction: row;
+
+  .mrp-left-navigation-pannel {
+    display: flex;
+    min-height: calc(100vh - 80px);
+    flex-direction: column;
+    background-color: $cockatiel-grey;
+    width: 300px;
+
+    button {
+      width: 100%;
+      min-width: unset;
+      border-radius: 0px;
+      border: 1px solid $grey-background;
+    }
+  }
+
+  .mrp-right-pannel {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .loader-container {
+    margin-top: 30px;
+  }
+}
