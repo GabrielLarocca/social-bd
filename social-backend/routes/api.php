@@ -26,6 +26,7 @@ Route::group(['prefix' => 'web'], function () {
 			Route::get('/list', [UserController::class, 'simpleList']);
 			Route::get('/bloqueados', [UserController::class, 'listBloqueados']);
 			Route::post('/bloquear', [UserController::class, 'bloquearUser']);
+			Route::get('/me', [UserController::class, 'get']);
 		});
 
 		Route::group(['prefix' => 'grupo'], function () {

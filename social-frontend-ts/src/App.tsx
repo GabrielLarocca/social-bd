@@ -9,56 +9,55 @@ import { AccountPage } from "./main/pages/account-page/account-page";
 import { ToastContainer } from "react-toastify";
 
 export function App() {
-  const [isLogged, setIsLogged] = useState<boolean>(false);
-  const navigate = useNavigate();
+	const [isLogged, setIsLogged] = useState<boolean>(false);
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isLogged) {
-      navigate("/");
-      return;
-    }
-  }, [isLogged]);
+	useEffect(() => {
+		if (!isLogged) {
+			return navigate("/");
+		}
+	}, [isLogged]);
 
-  if (!isLogged) {
-    return (
-      <div className="App">
-        <Header showPerson={false} />
-        <Routes>
-          <Route
-            path="/register"
-            element={<RegisterPage isLogged={isLogged} />}
-          />
-          <Route
-            path="/"
-            element={
-              <LandingPage setIsLogged={setIsLogged} isLogged={isLogged} />
-            }
-          />
-        </Routes>
-        <ToastContainer position="bottom-center" theme="colored" />
-      </div>
-    );
-  }
+	if (!isLogged) {
+		return (
+			<div className="App">
+				<Header showPerson={false} />
+				<Routes>
+					<Route
+						path="/register"
+						element={<RegisterPage isLogged={isLogged} />}
+					/>
+					<Route
+						path="/"
+						element={
+							<LandingPage setIsLogged={setIsLogged} isLogged={isLogged} />
+						}
+					/>
+				</Routes>
+				<ToastContainer position="bottom-center" theme="colored" />
+			</div>
+		);
+	}
 
-  return (
-    <div className="App">
-      <Header showPerson={isLogged} />
+	return (
+		<div className="App">
+			<Header showPerson={isLogged} />
 
-      <Routes>
-        <Route
-          path="/register"
-          element={<RegisterPage isLogged={isLogged} />}
-        />
-        <Route path="/main/*" element={<MainRoutePage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route
-          path="/"
-          element={
-            <LandingPage setIsLogged={setIsLogged} isLogged={isLogged} />
-          }
-        />
-      </Routes>
-      <ToastContainer position="bottom-center" theme="colored" />
-    </div>
-  );
+			<Routes>
+				<Route
+					path="/register"
+					element={<RegisterPage isLogged={isLogged} />}
+				/>
+				<Route path="/main/*" element={<MainRoutePage />} />
+				<Route path="/account" element={<AccountPage />} />
+				<Route
+					path="/"
+					element={
+						<LandingPage setIsLogged={setIsLogged} isLogged={isLogged} />
+					}
+				/>
+			</Routes>
+			<ToastContainer position="bottom-center" theme="colored" />
+		</div>
+	);
 }

@@ -18,6 +18,10 @@ class UserController extends Controller {
 		return response()->json($users);
 	}
 
+	public function get(Request $request) {
+		return response()->json(User::with(['photo'])->where(['id' => $request->user()->id])->firstOrFail());
+	}
+
 	public function bloquearUser(Request $request) {
 		$errors = array();
 

@@ -14,7 +14,7 @@ class Post extends Model {
 	];
 
 	public function grupo() {
-		return $this->belongsTo(File::class, 'pos_id_grupo');
+		return $this->belongsTo(Grupo::class, 'pos_id_grupo');
 	}
 
 	public function user() {
