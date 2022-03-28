@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../../../axios/http-common";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -25,40 +25,24 @@ export function GroupsPage(props: IGroupsPageProps) {
   });
 
   useEffect(() => {
-    // fetchData();
-    const groups: IGroup[] = [
-      {
-        id: 1,
-        gru_nome: "One Piece",
-        gru_descricao: "Grupo para falar de one piece",
-      },
-      {
-        id: 2,
-        gru_nome: "Naruto",
-        gru_descricao: "Grupo para falar de one piece",
-      },
-      {
-        id: 3,
-        gru_nome: "Sasuke",
-        gru_descricao: "Grupo para falar de one piece",
-      },
-    ];
-
-    setGroupsPageState({
-      ...groupsPageState,
-      groups,
-      isLoading: false,
-    });
-  }, []);
+    fetchData();
+  });
 
   const fetchData = async () => {
-    const { data: response } = await axios.get("/web/grupo/2");
+    try {
+      const { data: response } = await axios.post("grupo/list");
 
-    setGroupsPageState({
-      ...groupsPageState,
-      groups: response,
-      isLoading: false,
-    });
+      setGroupsPageState({
+        ...groupsPageState,
+        groups: response,
+        isLoading: false,
+      });
+    } catch {
+      setGroupsPageState({
+        ...groupsPageState,
+        isLoading: false,
+      });
+    }
   };
 
   const renderGroups = () => {
@@ -66,56 +50,51 @@ export function GroupsPage(props: IGroupsPageProps) {
 
     return (
       <ul>
-        <ul className="with-bottom-border without-hover">
+        <ul className="with-bottom-border">
           <li className="bold smaller">{"Id"}</li>
           <li className="bold medium">{"Nome"}</li>
           <li className="bold bigger">{"Descrição"}</li>
         </ul>
-        {groups.map((group, index) => {
-          const { id, gru_nome, gru_descricao } = group;
+        {groups
+          .sort((a, b) => a.id!! - b.id!!)
+          .map((group, index) => {
+            const { id, gru_nome, gru_descricao } = group;
 
-          return (
-            <ul
-              key={`groups-${group.id}`}
-              style={{ position: "relative" }}
-              className={
-                index === groups.length - 1 ? "with-bottom-border" : ""
-              }
-            >
-              <li
-                onClick={() => navigateToGroup(group)}
-                className="smaller with-hover"
+            return (
+              <ul
+                key={`groups-${group.id}`}
+                style={{ position: "relative" }}
+                className={
+                  index === groups.length - 1
+                    ? "with-bottom-border with-hover"
+                    : "with-hover"
+                }
               >
-                {id}
-              </li>
-              <li
-                onClick={() => navigateToGroup(group)}
-                className="medium with-hover"
-              >
-                {gru_nome}
-              </li>
-              <li
-                onClick={() => navigateToGroup(group)}
-                className="bigger with-hover"
-              >
-                {gru_descricao}
-              </li>
+                <li onClick={() => navigateToGroup(group)} className="smaller">
+                  {id}
+                </li>
+                <li onClick={() => navigateToGroup(group)} className="medium">
+                  {gru_nome}
+                </li>
+                <li onClick={() => navigateToGroup(group)} className="bigger">
+                  {gru_descricao}
+                </li>
 
-              <div
-                onClick={() => navigateToEditGroup(group)}
-                className="edit-container"
-              >
-                E
-              </div>
-              <div
-                onClick={() => excludeGroup(group!!.id!!, index)}
-                className="exclude-container"
-              >
-                X
-              </div>
-            </ul>
-          );
-        })}
+                <div
+                  onClick={() => navigateToEditGroup(group)}
+                  className="edit-container"
+                >
+                  E
+                </div>
+                <div
+                  onClick={() => excludeGroup(group!!.id!!, index)}
+                  className="exclude-container"
+                >
+                  X
+                </div>
+              </ul>
+            );
+          })}
       </ul>
     );
   };
@@ -129,12 +108,12 @@ export function GroupsPage(props: IGroupsPageProps) {
   };
 
   const excludeGroup = async (groupId: number, index: number) => {
-    // try {
-    //   await axios.delete("/web/grupo/2", { groupId });
-    // } catch (error) {
-    //   toast.error("Erro, tente novamente!");
-    //   return;
-    // }
+    try {
+      await axios.delete(`grupo/${groupId}`);
+    } catch (error) {
+      toast.error("Erro, tente novamente!");
+      return;
+    }
 
     const { groups } = groupsPageState;
 

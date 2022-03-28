@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../../../axios/http-common";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IGroup } from "../../../../models/group/group.model";
@@ -19,7 +19,10 @@ export function ManageGroupPage() {
 
   const [manageGroupPageState, setRegisterState] = useState<IManageGroupState>({
     hasId:
-      (routeState && routeState.group && typeof routeState.group.id === "number") || false,
+      (routeState &&
+        routeState.group &&
+        typeof routeState.group.id === "number") ||
+      false,
     group:
       routeState && routeState.group && typeof routeState.group.id === "number"
         ? routeState.group
@@ -48,9 +51,11 @@ export function ManageGroupPage() {
     setRegisterState({ ...manageGroupPageState, isLoading: true });
     try {
       if (manageGroupPageState.group && manageGroupPageState.group.id) {
-        await axios.put("/web/grupo", { ...manageGroupPageState.group });
+        await axios.post(`grupo/${manageGroupPageState.group.id}`, {
+          ...manageGroupPageState.group,
+        });
       } else {
-        await axios.post("/web/grupo", { ...manageGroupPageState.group });
+        await axios.post(`grupo`, { ...manageGroupPageState.group });
       }
     } catch (error) {
       setRegisterState({ ...manageGroupPageState, isLoading: false });
@@ -70,12 +75,12 @@ export function ManageGroupPage() {
           title="Nome"
           withoutMarginTop
           value={gru_nome}
-          onChange={(value) => setGroup(value, "email")}
+          onChange={(value) => setGroup(value, "gru_nome")}
         />
         <InputField
           title="Descricao"
           value={gru_descricao}
-          onChange={(value) => setGroup(value, "password")}
+          onChange={(value) => setGroup(value, "gru_descricao")}
         />
         <Button type="submit" classType="primary" text="Confirmar" />
       </form>

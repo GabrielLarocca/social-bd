@@ -4,102 +4,106 @@ import { toast } from "react-toastify";
 import { Button } from "../../components/button/button";
 import { InputField } from "../../components/input-field/input-field";
 import { Loader } from "../../components/loader/loader";
-import axios from '../../../axios/http-common';
+import axios from "../../../axios/http-common";
 import "./landing-page.scss";
 
 interface ILandingPageProps {
-	isLogged: boolean;
-	setIsLogged: (value: boolean) => void;
+  isLogged: boolean;
+  setIsLogged: (value: boolean) => void;
 }
 
 interface ILandingPageState {
-	isLoading?: boolean;
+  isLoading?: boolean;
 
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }
 
 export function LandingPage(props: ILandingPageProps) {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const [landingPageState, setLandingPageState] = useState<ILandingPageState>({
-		email: "",
-		password: "",
-	});
+  const [landingPageState, setLandingPageState] = useState<ILandingPageState>({
+    email: "",
+    password: "",
+  });
 
-	useEffect(() => {
-		if (props.isLogged) return navigate("/main/feed");
-	}, [props, navigate]);
+  useEffect(() => {
+    if (props.isLogged) return navigate("/main/feed");
+  }, [props, navigate]);
 
-	const loginAndPushToFeed = (e: any) => {
-		e.preventDefault();
+  const loginAndPushToFeed = (e: any) => {
+    e.preventDefault();
 
-		login();
-	};
+    login();
+  };
 
-	const login = async () => {
-		setLandingPageState({ ...landingPageState, isLoading: true });
+  const login = async () => {
+    setLandingPageState({ ...landingPageState, isLoading: true });
 
-		try {
-			const { data } = await axios.post("/login", {
-				email: landingPageState.email,
-				password: landingPageState.password,
-			});
+    try {
+      const { data } = await axios.post("/login", {
+        email: landingPageState.email,
+        password: landingPageState.password,
+      });
 
-			localStorage.setItem('token', data?.token);
+      console.log(data);
 
-			axios.defaults.headers.common['Authorization'] = `Bearer ${data?.token}`;
-		} catch (error) {
-			setLandingPageState({ ...landingPageState, isLoading: false });
+      localStorage.setItem("token", data?.token);
 
-			return toast.error("Erro, tente novamente!");
-		}
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data?.token}`;
+    } catch (error) {
+		console.log('ddd');
+      setLandingPageState({ ...landingPageState, isLoading: false });
 
-		toast.success("Sucesso!");
+	  toast.error("Erro, tente novamente!");
+      return;
+    }
 
-		navigate("/main/feed");
+    toast.success("Sucesso!");
 
-		props.setIsLogged(true);
-	};
+    navigate("/main/feed");
 
-	return (
-		<div className="landing-page-container">
-			{landingPageState.isLoading && <Loader />}
+    props.setIsLogged(true);
+  };
 
-			{!landingPageState.isLoading && (
-				<>
-					<span className="landing-page-title">Login</span>
+  return (
+    <div className="landing-page-container">
+      {landingPageState.isLoading && <Loader />}
 
-					<form onSubmit={loginAndPushToFeed}>
-						<InputField
-							title="Email"
-							withoutMarginTop
-							onChange={(value) =>
-								setLandingPageState({ ...landingPageState, email: value })
-							}
-							value={landingPageState.email}
-						/>
+      {!landingPageState.isLoading && (
+        <>
+          <span className="landing-page-title">Login</span>
 
-						<InputField
-							title="Senha"
-							customType="password"
-							onChange={(value) =>
-								setLandingPageState({ ...landingPageState, password: value })
-							}
-							value={landingPageState.password}
-						/>
+          <form onSubmit={loginAndPushToFeed}>
+            <InputField
+              title="Email"
+              withoutMarginTop
+              onChange={(value) =>
+                setLandingPageState({ ...landingPageState, email: value })
+              }
+              value={landingPageState.email}
+            />
 
-						<Button type="submit" classType="primary" text="Login" />
-					</form>
+            <InputField
+              title="Senha"
+              customType="password"
+              onChange={(value) =>
+                setLandingPageState({ ...landingPageState, password: value })
+              }
+              value={landingPageState.password}
+            />
 
-					<Button
-						classType="primary"
-						text="Registrar"
-						onClick={() => navigate("/register")}
-						withoutMarginTop
-					/>
-				</>
-			)}
-		</div>
-	);
+            <Button type="submit" classType="primary" text="Login" />
+          </form>
+
+          <Button
+            classType="primary"
+            text="Registrar"
+            onClick={() => navigate("/register")}
+            withoutMarginTop
+          />
+        </>
+      )}
+    </div>
+  );
 }

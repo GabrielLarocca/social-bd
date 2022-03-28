@@ -1,5 +1,5 @@
-import axios from "axios";
-import { useLayoutEffect, useState } from "react";
+import axios from "../../../axios/http-common";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button/button";
@@ -35,21 +35,6 @@ export function RegisterPage(props: IRegisterProps) {
     },
   });
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     //   setLoading(true);
-  //     try {
-  //       const { data: response } = await axios.get("/stuff/to/fetch");
-  //       // setData(response);
-  //     } catch (error) {
-  //       console.error("ddd");
-  //     }
-  //     //   setLoading(false);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   const { email, password, usr_name, usr_telefone, usr_sexo } =
     registerState.userDTO;
 
@@ -70,7 +55,7 @@ export function RegisterPage(props: IRegisterProps) {
     setRegisterState({ ...registerState, isLoading: true });
 
     try {
-      await axios.post("/web/register", registerState.userDTO);
+      await axios.post("/register", registerState.userDTO);
     } catch (error) {
       toast.error("Erro, tente novamente!");
       setRegisterState({ ...registerState, isLoading: false });
@@ -93,6 +78,7 @@ export function RegisterPage(props: IRegisterProps) {
         />
         <InputField
           title="Senha"
+          customType="password"
           value={password}
           onChange={(value) => setUserDto(value, "password")}
         />

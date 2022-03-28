@@ -1,18 +1,10 @@
-import axios from "axios";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import axios from "../../../axios/http-common";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IBlockedUser } from "../../../models/blocked-user/blocked-user.model";
 import { IUser } from "../../../models/user/user.model";
-import { Button } from "../../components/button/button";
 import { Loader } from "../../components/loader/loader";
-import { AccountPage } from "../account-page/account-page";
 import "./users-page.scss";
-
-interface IUsersPageProps {
-  isLogged?: boolean;
-}
 
 interface IUsersPageState {
   isLoading?: boolean;
@@ -20,10 +12,7 @@ interface IUsersPageState {
   blockedUsers: IUser[];
 }
 
-export function UsersPage(props: IUsersPageProps) {
-  const navigate = useNavigate();
-  const location = useLocation();
-
+export function UsersPage() {
   const [usersPageState, setUsersPageState] = useState<IUsersPageState>({
     users: [],
     blockedUsers: [],
@@ -31,57 +20,19 @@ export function UsersPage(props: IUsersPageProps) {
   });
 
   useEffect(() => {
-    // fetchData();
-    const users: IUser[] = [
-      {
-        id: 1,
-        email: "eee",
-        usr_name: "Joaquim",
-        usr_telefone: "2222",
-        usr_sexo: "masculino",
-      },
-      {
-        id: 2,
-        email: "eee",
-        usr_name: "Joaquim Pereira",
-        usr_telefone: "2222",
-        usr_sexo: "masculino",
-      },
-      {
-        id: 3,
-        email: "eee",
-        usr_name: "Orlando",
-        usr_telefone: "2222",
-        usr_sexo: "masculino",
-      },
-    ];
-
-    const blockedUsers: IUser[] = [
-      {
-        id: 1,
-        email: "eee",
-        usr_name: "Joaquim",
-        usr_telefone: "2222",
-        usr_sexo: "masculino",
-      },
-    ];
-
-    const filteredUsers = users.filter(
-      (user) => !blockedUsers.some((blockedUser) => user.id === blockedUser.id)
-    );
-
-    setUsersPageState({ blockedUsers, users: filteredUsers, isLoading: false });
+    fetchData();
   }, []);
 
   const fetchData = async () => {
-    const usersData = await axios.get("/web/user/list");
-    const blockedUsersData = await axios.get("/web/user/bloqueados");
+    const usersData = await axios.get("user/list");
+    const blockedUsersData = await axios.get("user/bloqueados");
 
-    const users: IUser[] = usersData.data.response;
-    const blockedUsersResponse: IBlockedUser[] = blockedUsersData.data.response;
+    const users: IUser[] = usersData.data;
+    const blockedUsersResponse: IBlockedUser[] = blockedUsersData.data;
+
     const blockedUsers = users.filter((user) =>
       blockedUsersResponse.some(
-        (blockedUser) => user.id === blockedUser.blocked_usrs_id
+        (blockedUser) => user.id === blockedUser.usb_id_bloqueado
       )
     );
     const filteredUsers = users.filter(
@@ -112,11 +63,11 @@ export function UsersPage(props: IUsersPageProps) {
               style={{ position: "relative" }}
               className={index === users.length - 1 ? "with-bottom-border" : ""}
             >
-              <li>{id}</li>
-              <li>{email}</li>
-              <li>{usr_name}</li>
-              <li>{usr_sexo}</li>
-              <li>{usr_telefone}</li>
+              <li>{id ? id : "Indefinido"}</li>
+              <li>{email ? email : "Indefinido"}</li>
+              <li>{usr_name ? usr_name : "Indefinido"}</li>
+              <li>{usr_sexo ? usr_sexo : "Indefinido"}</li>
+              <li>{usr_telefone ? usr_telefone : "Indefinido"}</li>
               <div
                 onClick={() => blockUser(user!!.id!!, index)}
                 className="block-user-container"
@@ -131,12 +82,12 @@ export function UsersPage(props: IUsersPageProps) {
   };
 
   const blockUser = async (userId: number, index: number) => {
-    // try {
-    //   await axios.post("/web/user/bloquear", { usb_id_bloqueado: userId });
-    // } catch (error) {
-    //   toast.error("Erro, tente novamente!");
-    //   return;
-    // }
+    try {
+      await axios.post("user/bloquear", { usb_id_bloqueado: userId });
+    } catch (error) {
+      toast.error("Erro, tente novamente!");
+      return;
+    }
 
     const { users, blockedUsers } = usersPageState;
 

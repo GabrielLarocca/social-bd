@@ -13,7 +13,7 @@ class UserController extends Controller {
 	public function simpleList(Request $request) {
 		$users = User::with('photo');
 
-		$users = $users->select('id', 'usr_name', 'email', 'usr_id_photo')->orderBy('usr_name', 'asc')->get();
+		$users = $users->select('id', 'usr_name', 'email', 'usr_id_photo', 'usr_sexo', 'usr_telefone')->orderBy('usr_name', 'asc')->get();
 
 		return response()->json($users);
 	}

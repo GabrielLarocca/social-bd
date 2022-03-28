@@ -59,11 +59,13 @@
         &.bigger {
           width: calc(50% - 1px);
         }
+      }
 
-        &.with-hover {
-          cursor: pointer;
+      &.with-hover {
+        cursor: pointer;
 
-          &:hover {
+        &:hover {
+          li {
             color: $button-purple2;
             background-color: $cockatiel-grey;
           }
