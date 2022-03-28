@@ -1,54 +1,16 @@
-import axios from "axios";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Button } from "../../components/button/button";
-import { AccountPage } from "../account-page/account-page";
+import { Route, Routes } from "react-router-dom";
 import "./group-routes.scss";
+import { GroupsPage } from "./groups-page/groups-page";
+import { ManageGroupPage } from "./manage-group-page/manage-group-page";
 
-interface IGroupRoutesProps {
-  isLogged?: boolean;
-}
-
-interface IGroupRoutesState {
-  isLoading?: boolean;
-}
-
-export function GroupRoutes(props: IGroupRoutesProps) {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const [groupRoutesState, setGroupRoutesState] = useState<IGroupRoutesState>(
-    {}
-  );
-
+export function GroupRoutes() {
   return (
     <div className="group-routes-container">
-      <div className="left-pannel">
-        <Routes>
-          <Route path="/feed" element={<AccountPage />} />
-        </Routes>
-      </div>
-      <div className="right-pannel">
-        <Button
-          classType="primary"
-          text="Feed"
-          onClick={() => navigate("feed")}
-          withoutMarginTop
-          customClassName={
-            location.pathname.includes("feed") ? "active-classname" : ""
-          }
-        />
-        <Button
-          classType="primary"
-          text="Grupos"
-          onClick={() => navigate("groups")}
-          customClassName={
-            location.pathname.includes("groups") ? "active-classname" : ""
-          }
-          withoutMarginTop
-        />
-      </div>
+      <Routes>
+        <Route path="/manage" element={<ManageGroupPage />} />
+        <Route path="/feed/:key" element={<GroupsPage />} />
+        <Route path="/" element={<GroupsPage />} />
+      </Routes>
     </div>
   );
 }

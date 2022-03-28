@@ -72,8 +72,8 @@ export function AccountPage(props: IAccountProps) {
   };
 
   return (
-    <div className="register-page-container">
-      <span className="register-page-title">Minha conta</span>
+    <div className="account-page-container">
+      <span className="account-page-title">Minha conta</span>
       <form onSubmit={loginAndPushToFeed}>
         <InputField
           title="Email"

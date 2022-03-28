@@ -54,9 +54,9 @@ export function MainRoutePage(props: IMainRoutePageProps) {
       </div>
       <div className="mrp-right-pannel">
         <Routes>
-          <Route path="/feed" element={<FeedPage />} />
-          <Route path="/groups" element={<GroupRoutes />} />
-          <Route path="/users" element={<UsersPage />} />
+          <Route path="/feed/*" element={<FeedPage />} />
+          <Route path="/groups/*" element={<GroupRoutes />} />
+          <Route path="/users/*" element={<UsersPage />} />
         </Routes>
       </div>
     </div>
