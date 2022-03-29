@@ -31,8 +31,8 @@ class PostController extends Controller {
 		$obj->pos_texto = $request->pos_texto;
 		$obj->pos_id_user = $request->user()->id;
 
-		if ($request->post_id_grupo) {
-			$obj->post_id_grupo = $request->post_id_grupo;
+		if ($request->pos_id_grupo) {
+			$obj->pos_id_grupo = $request->pos_id_grupo;
 		}
 
 		$obj->save();

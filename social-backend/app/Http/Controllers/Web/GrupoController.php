@@ -104,6 +104,15 @@ class GrupoController extends Controller {
 		return response()->json($obj);
 	}
 
+	public function removerDoGrupo(Request $request, $groupId, $userId) {
+		$errors = array();
+
+		$grupoUser = GrupoUsers::where(['grs_id_user' => $userId, 'grs_id_grupo' => $groupId])->firstOrFail();
+		$grupoUser->delete();
+
+		return response(null, 200);
+	}
+
 	public function get(Request $request, $id) {
 		return response()->json(Grupo::where(["id" => $id])->firstOrFail());
 	}

@@ -1,120 +1,123 @@
-import axios from "axios";
-import { useLayoutEffect, useState } from "react";
+import axios from "../../../axios/http-common";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/button/button";
 import { InputField } from "../../components/input-field/input-field";
 import "./account-page.scss";
+import { Loader } from "../../components/loader/loader";
+import { IUser } from "../../../models/user/user.model";
+import { toast } from "react-toastify";
 
 interface IAccountProps {}
 
 interface IAccountState {
-  userDTO: {
-    email: string;
-    password: string;
-    usr_name: string;
-    usr_telefone: string;
-    usr_sexo: string;
-  };
+  userDTO: IUser;
   isLoading?: boolean;
 }
 
 export function AccountPage(props: IAccountProps) {
   const navigate = useNavigate();
 
-  const [registerState, setRegisterState] = useState<IAccountState>({
+  const [accountState, setAccountState] = useState<IAccountState>({
     userDTO: {
+      id: undefined,
       email: "",
-      password: "",
       usr_name: "",
       usr_telefone: "",
       usr_sexo: "",
     },
+    isLoading: true,
   });
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     //   setLoading(true);
-  //     try {
-  //       const { data: response } = await axios.get("/stuff/to/fetch");
-  //       // setData(response);
-  //     } catch (error) {
-  //       console.error("ddd");
-  //     }
-  //     //   setLoading(false);
-  //   };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  //   fetchData();
-  // }, []);
+  const fetchData = async () => {
+    const { data: response } = await axios.get("user/me");
 
-  const { email, password, usr_name, usr_telefone, usr_sexo } =
-    registerState.userDTO;
-
-  const setUserDto = (value: string, key: string) => {
-    setRegisterState({
-      ...registerState,
-      userDTO: { ...registerState.userDTO, [key]: value },
+    setAccountState({
+      userDTO: response,
+      isLoading: false,
     });
   };
 
-  const loginAndPushToFeed = (e: any) => {
+  const { email, usr_name, usr_telefone, usr_sexo } = accountState.userDTO;
+
+  const setUserDto = (value: string, key: string) => {
+    setAccountState({
+      ...accountState,
+      userDTO: { ...accountState.userDTO, [key]: value },
+    });
+  };
+
+  const postAccountAndFetchData = (e: any) => {
     e.preventDefault();
 
-    const login = async () => {
-      setRegisterState({ ...registerState, isLoading: true });
-      try {
-        const { data: response } = await axios.get("/stuff/to/fetch");
-        // setData(response);
-      } catch (error) {}
-      setRegisterState({ ...registerState, isLoading: false });
-    };
+    postAccount();
+  };
 
-    login();
+  const postAccount = async () => {
+    setAccountState({ ...accountState, isLoading: true });
+
+    try {
+      await axios.post(`user/me/${accountState.userDTO.id}`, {
+        ...accountState.userDTO,
+      });
+    } catch (error) {
+      toast.error("Algo deu errado!");
+      setAccountState({ ...accountState, isLoading: false });
+      return;
+    }
+
+    toast.success("Sucesso! Usuário alterado!");
+    setAccountState({ ...accountState, isLoading: false });
   };
 
   return (
     <div className="account-page-container">
-      <span className="account-page-title">Minha conta</span>
-      <form onSubmit={loginAndPushToFeed}>
-        <InputField
-          title="Email"
-          withoutMarginTop
-          value={email}
-          onChange={(value) => setUserDto(value, "email")}
-        />
-        <InputField
-          title="Senha"
-          value={password}
-          onChange={(value) => setUserDto(value, "password")}
-        />
-        <InputField
-          title="Nome"
-          value={usr_name}
-          onChange={(value) => setUserDto(value, "usr_name")}
-        />
-        <InputField
-          customType="number"
-          title="Telefone"
-          value={usr_telefone}
-          onChange={(value) => setUserDto(value, "usr_telefone")}
-        />
-        <InputField
-          title="Sexo"
-          value={usr_sexo}
-          onChange={(value) => setUserDto(value, "usr_sexo")}
-        />
-        <Button type="submit" classType="primary" text="Salvar" />
-      </form>
-      <Button
-        classType="delete"
-        text="Deletar conta"
-        onClick={() => navigate("/")}
-        withoutMarginTop
-      />
-      <Button
-        classType="secondary"
-        text="Voltar"
-        onClick={() => navigate(-1)}
-      />
+      {accountState.isLoading && (
+        <div className="account-loader-container">
+          <Loader />
+        </div>
+      )}
+      {!accountState.isLoading && (
+        <>
+          <span className="account-page-title">Minha conta</span>
+          <form onSubmit={postAccountAndFetchData}>
+            <InputField
+              title="Email"
+              withoutMarginTop
+              value={email}
+              onChange={(value) => setUserDto(value, "email")}
+              disabled
+            />
+            <InputField
+              title="Nome"
+              value={usr_name}
+              onChange={(value) => setUserDto(value, "usr_name")}
+            />
+            <InputField
+              customType="number"
+              title="Telefone"
+              value={usr_telefone}
+              onChange={(value) => setUserDto(value, "usr_telefone")}
+            />
+            <InputField
+              title="Sexo"
+              value={usr_sexo}
+              onChange={(value) => setUserDto(value, "usr_sexo")}
+            />
+            <Button type="submit" classType="primary" text="Salvar" />
+          </form>
+          <Button
+            classType="secondary"
+            text="Voltar"
+            onClick={() => navigate(-1)}
+            withoutMarginTop
+          />
+        </>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export interface IPost {
   id?: number;
-  post_text?: string;
-  post_id_user?: number;
-  post_id_grupo?: number;
+  pos_texto?: string;
+  pos_id_user?: number;
+  pos_id_grupo?: number;
 }

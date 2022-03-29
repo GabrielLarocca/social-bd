@@ -24,10 +24,6 @@ export function GroupsPage(props: IGroupsPageProps) {
     isLoading: true,
   });
 
-  useEffect(() => {
-    fetchData();
-  });
-
   const fetchData = async () => {
     try {
       const { data: response } = await axios.post("grupo/list");
@@ -44,6 +40,10 @@ export function GroupsPage(props: IGroupsPageProps) {
       });
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const renderGroups = () => {
     const { groups } = groupsPageState;
@@ -100,7 +100,7 @@ export function GroupsPage(props: IGroupsPageProps) {
   };
 
   const navigateToGroup = (group: IGroup) => {
-    navigate(`feed/${group.id}`);
+    navigate(`info/${group.id}`);
   };
 
   const navigateToEditGroup = (group: IGroup) => {

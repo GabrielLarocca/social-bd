@@ -27,6 +27,7 @@ Route::group(['prefix' => 'web'], function () {
 			Route::get('/bloqueados', [UserController::class, 'listBloqueados']);
 			Route::post('/bloquear', [UserController::class, 'bloquearUser']);
 			Route::get('/me', [UserController::class, 'get']);
+			Route::post('/me/{id}', [UserController::class, 'update']);
 		});
 
 		Route::group(['prefix' => 'grupo'], function () {
@@ -39,6 +40,7 @@ Route::group(['prefix' => 'web'], function () {
 			Route::group(['prefix' => 'participantes'], function () {
 				Route::get('/{id}', [GrupoController::class, 'participantes']);
 				Route::post('/participarGrupo', [GrupoController::class, 'participarGrupo']);
+				Route::delete('/removerDoGrupo/{groupId}/{userId}', [GrupoController::class, 'removerDoGrupo']);
 			});
 		});
 

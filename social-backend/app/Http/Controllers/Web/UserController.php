@@ -22,6 +22,34 @@ class UserController extends Controller {
 		return response()->json(User::with(['photo'])->where(['id' => $request->user()->id])->firstOrFail());
 	}
 
+	public function update(Request $request, $id) {
+		$errors = array();
+
+		$validator = Validator::make($request->all(), [
+			'usr_name' => 'required',
+			'usr_telefone' => 'required',
+			'usr_sexo' => 'required',
+		]);
+
+		if ($validator->fails()) {
+			foreach ($validator->errors()->getMessages() as $item) {
+				array_push($errors, $item[0]);
+			}
+
+			return response()->json(['errors' => $errors]);
+		}
+
+		$obj = User::where(['id' => $id])->firstOrFail();
+
+		$obj->usr_name = $request->usr_name;
+		$obj->usr_telefone = $request->usr_telefone;
+		$obj->usr_sexo = $request->usr_sexo;
+
+		$obj->save();
+
+		return response()->json($obj);
+	}
+
 	public function bloquearUser(Request $request) {
 		$errors = array();
 
