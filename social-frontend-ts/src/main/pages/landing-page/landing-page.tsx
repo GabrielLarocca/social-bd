@@ -52,10 +52,9 @@ export function LandingPage(props: ILandingPageProps) {
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${data?.token}`;
     } catch (error) {
-		console.log('ddd');
       setLandingPageState({ ...landingPageState, isLoading: false });
 
-	  toast.error("Erro, tente novamente!");
+      toast.error("Erro, tente novamente!");
       return;
     }
 

@@ -272,7 +272,7 @@ export function GroupsInfoPage() {
       return;
     }
 
-    toast.error("Sucesso!");
+    toast.success("Sucesso!");
     setGroupsInfoPageState({
       ...groupsInfoPageState,
       isLoading: true,
